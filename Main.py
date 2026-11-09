@@ -2,6 +2,13 @@ from hub import *
 import motor_pair,motor
 import color_sensor,distance_sensor, runloop, color
 from math import pi
+from Mission_codes.M01_wael import wael
+from Mission_codes.M02_mia import mia
+from Mission_codes.M03_daphne import daphne
+from Mission_codes.M06_teemo import teemo
+from Mission_codes.M07_noahXremiXjiggle import noahXremiXjiggle
+from Mission_codes.M11_luke import luke
+from Mission_codes.M_UND_swapside import swapside
 
 motor_pair.pair(motor_pair.PAIR_1,port.D,port.C)
 
