@@ -9,7 +9,7 @@ from Mission_codes.M06_teemo import teemo
 from Mission_codes.M07_noahXremiXjiggle import noahXremiXjiggle
 from Mission_codes.M11_luke import luke
 from Mission_codes.M_UND_swapside import swapside
-
+#set motor pair for wheels
 motor_pair.pair(motor_pair.PAIR_1,port.D,port.C)
 
 class robot_base_class:
