@@ -14,9 +14,9 @@ motor_pair.pair(motor_pair.PAIR_1,port.D,port.C)
 
 class robot_base_class:
     def __init__ (self):
-        self.trackwidth = 120
+        self.trackwidth = 112
         self.wheels = motor_pair.PAIR_1
-        self.irad = 44
+        self.irad = 51
         self.idiam = self.irad*2
         self.icirum = self.idiam*pi
         self.mmpd = self.icirum/360
