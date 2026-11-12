@@ -1,7 +1,9 @@
-from hub import *
-import motor_pair,motor
-import color_sensor,distance_sensor, runloop, color
-from math import pi
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor
+from pybricks.parameters import Port, Direction, Color, Button, Icon
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait
+
 from Mission_codes.M01_wael import wael
 from Mission_codes.M02_mia import mia
 from Mission_codes.M03_daphne import daphne
@@ -9,121 +11,121 @@ from Mission_codes.M06_teemo import teemo
 from Mission_codes.M07_noahXremiXjiggle import noahXremiXjiggle
 from Mission_codes.M11_luke import luke
 from Mission_codes.M_UND_swapside import swapside
-#set motor pair for wheels
-motor_pair.pair(motor_pair.PAIR_1,port.D,port.C)
+
+# Initialize Hub, Motors, and Sensors once
+hub = PrimeHub()
+left_motor = Motor(Port.D, Direction.COUNTERCLOCKWISE)
+right_motor = Motor(Port.C)
+color_sensor = ColorSensor(Port.B)
+
+# wheel_diameter = 88 (irad 44 * 2), axle_track = 120
+drive_base = DriveBase(left_motor, right_motor, wheel_diameter=88, axle_track=120)
+drive_base.use_gyro(True)
+
 
 class robot_base_class:
-    def __init__ (self):
-        self.trackwidth = 112
-        self.wheels = motor_pair.PAIR_1
-        self.irad = 51
-        self.idiam = self.irad*2
-        self.icirum = self.idiam*pi
-        self.mmpd = self.icirum/360
-        self.mmtod = lambda mm: round(mm/self.mmpd)
-        self.calc_arc = lambda angle, radius: (angle/360)*(2*radius*pi)
+    def __init__(self):
+        self.hub = hub
+        self.db = drive_base
+        self.sensor = color_sensor
+        self.trackwidth = 120
+
         self.colorcode = {
-            color.RED: daphne,
-            color.YELLOW: mia,
-            color.MAGENTA: wael,
-            color.WHITE: luke,
-            color.GREEN: teemo,
-            color.AZURE: noahXremiXjiggle,
-            color.UNKNOWN: swapside,
+            Color.RED: daphne,
+            Color.YELLOW: mia,
+            Color.MAGENTA: wael,
+            Color.WHITE: luke,
+            Color.GREEN: teemo,
+            Color.BLUE: noahXremiXjiggle,  # Pybricks uses Color.BLUE instead of AZURE
+            Color.NONE: swapside,          # Pybricks uses Color.NONE instead of UNKNOWN
         }
         self.numtolet = [
-            'A','B','C','D',
-            'E','F','G','H',
-            'I','J','K','L',
-            'M','N','O','P',
-            'Q','R','S','T',
-            'U','V','W','X',
-            'Y','Z'
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+            'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+            'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+            'Y', 'Z'
         ]
 
-    async def colorrun (self,colorread):
-        print('running colorrun on color')
-        for codecolor, code in self.colorcode.items():
-            if colorread == codecolor:
-                runloop.run(code())
-        '''if colorread == color.RED :
-            runloop.run(self.colorcode['red']())
-        elif colorread == color.YELLOW:
-            runloop.run(self.colorcode['yellow']())'''
+    def colorrun(self, colorread):
+        print('running colorrun on color:', colorread)
+        if colorread in self.colorcode:
+            self.colorcode[colorread]()
 
-    async def secondary(self):
+    def secondary(self):
         print('starting second')
-        true_set = True
         right_pressed = False
-        init = False
-        while true_set:
-            readcolor = color_sensor.color(port.B)
-            
-            if readcolor == color.RED:
-                light_matrix.write(self.numtolet[0])
-            elif readcolor == color.AZURE:
-                light_matrix.write(self.numtolet[1])
-            elif readcolor == color.YELLOW:
-                light_matrix.write(self.numtolet[2])
-            elif readcolor == color.MAGENTA:
-                light_matrix.write(self.numtolet[3])
-            elif readcolor == color.GREEN:
-                light_matrix.write(self.numtolet[4])
-            elif readcolor == color.WHITE:
-                light_matrix.write(self.numtolet[5])
-            elif readcolor == color.UNKNOWN:
-                light_matrix.show_image(light_matrix.IMAGE_ARROW_W)
-            else:
-                light_matrix.clear()
 
-            if button.pressed(button.RIGHT) and not right_pressed and init == False:
+        while True:
+            readcolor = self.sensor.color()
+
+            if readcolor == Color.RED:
+                self.hub.display.char(self.numtolet[0])
+            elif readcolor == Color.BLUE:
+                self.hub.display.char(self.numtolet[1])
+            elif readcolor == Color.YELLOW:
+                self.hub.display.char(self.numtolet[2])
+            elif readcolor == Color.MAGENTA:
+                self.hub.display.char(self.numtolet[3])
+            elif readcolor == Color.GREEN:
+                self.hub.display.char(self.numtolet[4])
+            elif readcolor == Color.WHITE:
+                self.hub.display.char(self.numtolet[5])
+            elif readcolor == Color.NONE:
+                self.hub.display.icon(Icon.ARROW_LEFT)
+            else:
+                self.hub.display.off()
+
+            pressed = self.hub.buttons.pressed()
+            if Button.RIGHT in pressed and not right_pressed:
                 right_pressed = True
-                sound.beep(1500, 200, 100)
-                await runloop.sleep_ms(125)
-                await self.colorrun(readcolor)
-            elif not button.pressed(button.RIGHT):
+                self.hub.speaker.beep(1500, 200)
+                wait(125)
+                self.colorrun(readcolor)
+            elif Button.RIGHT not in pressed:
                 right_pressed = False
 
-class straight_base_class(robot_base_class):
-    def __init__(self):
-        super().__init__()
+            wait(20)
 
-    async def drive (self, dist, velo):
-        await motor_pair.move_for_degrees(self.wheels, self.mmtod(dist), 0, velocity=velo)
+
+class straight_base_class(robot_base_class):
+    def drive(self, dist, velo):
+        # Set straight speed (mm/s) and drive distance (mm)
+        self.db.settings(straight_speed=abs(velo))
+        self.db.straight(dist)
+
 
 class time_class(robot_base_class):
-    def __init__(self):
-        super().__init__()
-    
-    async def stop(self):
-        motor_pair.stop(self.wheels)
-    
-    async def wait (self, duration):
-        await runloop.sleep_ms (duration)
+    def stop(self):
+        self.db.stop()
+
+    def wait(self, duration):
+        wait(duration)
+
 
 class turn_base_class(robot_base_class):
-    def __init__(self):
-        super().__init__()
-    #arc turns
-    async def Larc_turn (self, angle, velo):
-        await motor_pair.move_tank_for_degrees(self.wheels, self.mmtod(self.calc_arc(angle, self.trackwidth)), 0, velo)
-    async def Rarc_turn (self, angle, velo):
-        await motor_pair.move_tank_for_degrees(self.wheels, self.mmtod(self.calc_arc(angle, self.trackwidth)), velo, 0)
-    #tank turns
-    async def Ltturn (self, angle, velo):
-        await motor_pair.move_tank_for_degrees(self.wheels, self.mmtod(self.calc_arc(angle, self.trackwidth/2)), -velo, velo)
-    async def Rtturn (self, angle, velo):
-        await motor_pair.move_tank_for_degrees(self.wheels, self.mmtod(self.calc_arc(angle, self.trackwidth/2)), velo, -velo)
-    #wide turns
-    async def Lwturn (self, radius, angle, velo):
-        r1 = radius
-        r2 = radius+self.trackwidth
-        await motor_pair.move_tank_for_degrees(self.wheels, self.mmtod(self.calc_arc(angle, radius)), round(velo*(r1/r2)), velo)
-    async def Rwturn (self, radius, angle, velo):
-        r1 = radius
-        r2 = radius+self.trackwidth
-        await motor_pair.move_tank_for_degrees(self.wheels, self.mmtod(self.calc_arc(angle, radius)), velo, round(velo*(r1/r2)))
+    # Tank (in-place) turns
+    def Ltturn(self, angle, velo):
+        self.db.settings(turn_rate=abs(velo))
+        self.db.turn(-angle)
 
+    def Rtturn(self, angle, velo):
+        self.db.settings(turn_rate=abs(velo))
+        self.db.turn(angle)
+
+    # Wide turns: positive angle = forward curve, negative angle = backward curve
+    def Lwturn(self, radius, angle, velo):
+        self.db.settings(straight_speed=abs(velo))
+        self.db.curve(abs(radius) + (self.trackwidth / 2), -angle)
+
+    def Rwturn(self, radius, angle, velo):
+        self.db.settings(straight_speed=abs(velo))
+        self.db.curve(abs(radius) + (self.trackwidth / 2), angle)
+
+    def Larc_turn(self, angle, velo):
+        self.Lwturn(0, angle, velo)
+
+    def Rarc_turn(self, angle, velo):
+        self.Rwturn(0, angle, velo)
 
 class fullbot(robot_base_class):
     def __init__(self):
@@ -132,8 +134,7 @@ class fullbot(robot_base_class):
         self.turn = turn_base_class()
         self.time = time_class()
 
-async def main():
-    bot = fullbot()
-    await bot.secondary()
 
-runloop.run(main())
+if __name__ == "__main__":
+    bot = fullbot()
+    bot.secondary()
