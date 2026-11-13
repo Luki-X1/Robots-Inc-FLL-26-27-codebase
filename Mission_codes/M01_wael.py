@@ -1,5 +1,7 @@
 #___________________________________________________________________________
-async def wael():
+from robot_base import fullbot
+
+def wael():
     robot = fullbot()
     '''await motor_pair.move_for_degrees(robot.wheels, robot.mmtod(650), 0, velocity=250)
     await motor_pair.move_tank_for_degrees(robot.wheels, 78, 200, 400)
@@ -7,8 +9,8 @@ async def wael():
     '''await robot.straight.drive(650,250)
         #await robot.turn.Larc_turn(5, 200)
         await robot.straight.drive(-650,250)'''
-    await robot.straight.drive(600,500)
-    await robot.turn.Larc_turn(60, 200)
-    await robot.turn.Larc_turn(-60, 200)
-    await robot.straight.drive(-650,1000)
+    robot.straight.drive(600,500)
+    robot.turn.Larc_turn(60, 200)
+    robot.turn.Larc_turn(-60, 200)
+    robot.straight.drive(-650,1000)
 #___________________________________________________________________________
