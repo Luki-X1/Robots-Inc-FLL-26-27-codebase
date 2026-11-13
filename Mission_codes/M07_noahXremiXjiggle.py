@@ -1,7 +1,7 @@
 #___________________________________________________________________________
-from Main import fullbot
+from robot_base import fullbot
 
-async def noahXremiXjiggle():
+def noahXremiXjiggle():
     robot = fullbot()
     robot.straight.drive(700, 250)
     robot.straight.drive(-400, 400)

@@ -1,7 +1,7 @@
 #___________________________________________________________________________
-from Main import fullbot
+from robot_base import fullbot
 
-async def luke():
+def luke():
     # write your code here
     robot = fullbot()
     '''await motor_pair.move_for_degrees(motor_pair.PAIR_1, round(440/mmpd), 0, velocity=200)

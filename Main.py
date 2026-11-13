@@ -1,27 +1,19 @@
-from pybricks.hubs import PrimeHub
-from pybricks.pupdevices import Motor, ColorSensor
-from pybricks.parameters import Port, Direction, Color, Button, Icon
-from pybricks.robotics import DriveBase
+from pybricks.parameters import Color, Button, Icon
 from pybricks.tools import wait
+from robot_base import fullbot
 
-# Initialize Hub, Motors, and Sensors once
-hub = PrimeHub()
-left_motor = Motor(Port.D, Direction.COUNTERCLOCKWISE)
-right_motor = Motor(Port.C)
-color_sensor = ColorSensor(Port.B)
-
-# wheel_diameter = 88 (irad 44 * 2), axle_track = 120
-drive_base = DriveBase(left_motor, right_motor, wheel_diameter=88, axle_track=120)
-drive_base.use_gyro(True)
+from Mission_codes.M01_wael import wael
+from Mission_codes.M02_mia import mia
+from Mission_codes.M03_daphne import daphne
+from Mission_codes.M06_teemo import teemo
+from Mission_codes.M07_noahXremiXjiggle import noahXremiXjiggle
+from Mission_codes.M11_luke import luke
+from Mission_codes.M_UND_swapside import swapside
 
 
-class robot_base_class:
+class mission_selector(fullbot):
     def __init__(self):
-        self.hub = hub
-        self.db = drive_base
-        self.sensor = color_sensor
-        self.trackwidth = 120
-
+        super().__init__()
         self.colorcode = {
             Color.RED: daphne,
             Color.YELLOW: mia,
@@ -79,61 +71,6 @@ class robot_base_class:
             wait(20)
 
 
-class straight_base_class(robot_base_class):
-    def drive(self, dist, velo):
-        self.db.settings(straight_speed=abs(velo))
-        self.db.straight(dist)
-
-
-class time_class(robot_base_class):
-    def stop(self):
-        self.db.stop()
-
-    def wait(self, duration):
-        wait(duration)
-
-
-class turn_base_class(robot_base_class):
-    def Ltturn(self, angle, velo):
-        self.db.settings(turn_rate=abs(velo))
-        self.db.turn(-angle)
-
-    def Rtturn(self, angle, velo):
-        self.db.settings(turn_rate=abs(velo))
-        self.db.turn(angle)
-
-    def Lwturn(self, radius, angle, velo):
-        self.db.settings(straight_speed=abs(velo))
-        self.db.curve(abs(radius) + (self.trackwidth / 2), -angle)
-
-    def Rwturn(self, radius, angle, velo):
-        self.db.settings(straight_speed=abs(velo))
-        self.db.curve(abs(radius) + (self.trackwidth / 2), angle)
-
-    def Larc_turn(self, angle, velo):
-        self.Lwturn(0, angle, velo)
-
-    def Rarc_turn(self, angle, velo):
-        self.Rwturn(0, angle, velo)
-
-
-class fullbot(robot_base_class):
-    def __init__(self):
-        super().__init__()
-        self.straight = straight_base_class()
-        self.turn = turn_base_class()
-        self.time = time_class()
-
-
-# Import missions AFTER fullbot is defined so mission files can import fullbot safely
-from Mission_codes.M01_wael import wael
-from Mission_codes.M02_mia import mia
-from Mission_codes.M03_daphne import daphne
-from Mission_codes.M06_teemo import teemo
-from Mission_codes.M07_noahXremiXjiggle import noahXremiXjiggle
-from Mission_codes.M11_luke import luke
-from Mission_codes.M_UND_swapside import swapside
-
 if __name__ == "__main__":
-    bot = fullbot()
+    bot = mission_selector()
     bot.secondary()

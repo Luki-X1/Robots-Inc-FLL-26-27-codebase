@@ -1,5 +1,5 @@
 #___________________________________________________________________________
-from Main import fullbot
+from robot_base import fullbot
 
 def teemo():
     robot = fullbot()

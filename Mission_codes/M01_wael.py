@@ -1,7 +1,7 @@
 #___________________________________________________________________________
-from Main import fullbot
+from robot_base import fullbot
 
-async def wael():
+def wael():
     robot = fullbot()
     '''await motor_pair.move_for_degrees(robot.wheels, robot.mmtod(650), 0, velocity=250)
     await motor_pair.move_tank_for_degrees(robot.wheels, 78, 200, 400)
