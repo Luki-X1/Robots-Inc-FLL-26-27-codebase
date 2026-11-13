@@ -1,4 +1,6 @@
 #___________________________________________________________________________
+from Main import fullbot
+
 async def mia():
     robot = fullbot()
     await robot.straight.drive(430, 250)
