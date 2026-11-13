@@ -1,6 +1,6 @@
 from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import Motor, ColorSensor
-from pybricks.parameters import Port, Direction
+from pybricks.parameters import Port, Direction, Stop
 from pybricks.robotics import DriveBase
 from pybricks.tools import wait
 
@@ -25,7 +25,7 @@ class robot_base_class:
 class straight_base_class(robot_base_class):
     def drive(self, dist, velo):
         self.db.settings(straight_speed=abs(velo))
-        self.db.straight(dist)
+        self.db.straight(dist, then=Stop.COAST)
 
 
 class time_class(robot_base_class):
