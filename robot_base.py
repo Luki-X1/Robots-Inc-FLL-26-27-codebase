@@ -40,44 +40,40 @@ class robot_base_class:
         self.sensor = color_sensor
         self.trackwidth = 120
 
-
 class straight_base_class(robot_base_class):
-    def drive(self, dist, velo):
+    async def drive(self, dist, velo):
         self.db.settings(straight_speed=abs(velo))
-        self.db.straight(dist, then=Stop.COAST)
-
+        await self.db.straight(dist, then=Stop.COAST)
 
 class time_class(robot_base_class):
     def stop(self):
         self.db.stop()
 
-    def wait(self, duration):
-        wait(duration)
-
+    async def wait(self, duration):
+        await wait(duration)
 
 class turn_base_class(robot_base_class):
-    def Ltturn(self, angle, velo):
+    async def Ltturn(self, angle, velo):
         self.db.settings(turn_rate=abs(velo))
-        self.db.turn(-angle)
+        await self.db.turn(-angle)
 
-    def Rtturn(self, angle, velo):
+    async def Rtturn(self, angle, velo):
         self.db.settings(turn_rate=abs(velo))
-        self.db.turn(angle)
+        await self.db.turn(angle)
 
-    def Lwturn(self, radius, angle, velo):
+    async def Lwturn(self, radius, angle, velo):
         self.db.settings(straight_speed=abs(velo))
-        self.db.curve(abs(radius) + (self.trackwidth / 2), -angle)
+        await self.db.curve(abs(radius) + (self.trackwidth / 2), -angle)
 
-    def Rwturn(self, radius, angle, velo):
+    async def Rwturn(self, radius, angle, velo):
         self.db.settings(straight_speed=abs(velo))
-        self.db.curve(abs(radius) + (self.trackwidth / 2), angle)
+        await self.db.curve(abs(radius) + (self.trackwidth / 2), angle)
 
-    def Larc_turn(self, angle, velo):
-        self.Lwturn(0, angle, velo)
+    async def Larc_turn(self, angle, velo):
+        await self.Lwturn(0, angle, velo)
 
-    def Rarc_turn(self, angle, velo):
-        self.Rwturn(0, angle, velo)
-
+    async def Rarc_turn(self, angle, velo):
+        await self.Rwturn(0, angle, velo)
 
 class fullbot(robot_base_class):
     def __init__(self):

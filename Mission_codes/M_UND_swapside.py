@@ -1,7 +1,7 @@
 #___________________________________________________________________________
 from robot_base import fullbot
 
-def swapside():
+async def swapside():
     robot = fullbot()
-    robot.straight.drive(1650, 500)
+    await robot.straight.drive(1650, 500)
 #___________________________________________________________________________
