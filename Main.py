@@ -1,5 +1,5 @@
 from pybricks.parameters import Color, Button, Icon
-from pybricks.tools import wait
+from pybricks.tools import wait, multitask, run_task
 from robot_base import fullbot
 
 from Mission_codes.M01_wael import wael
@@ -31,10 +31,19 @@ class mission_selector(fullbot):
             'Y', 'Z'
         ]
 
+    async def _run_mission_task(self, mission_func):
+        await mission_func()
+
     def colorrun(self, colorread):
         print('running colorrun on color:', colorread)
         if colorread in self.colorcode:
-            self.colorcode[colorread]()
+            mission_func = self.colorcode[colorread]
+            # Runs the mission and background music simultaneously; stops music as soon as the mission finishes
+            run_task(multitask(
+                self._run_mission_task(mission_func),
+                haydn_104_finale.play_background(gap=25, loop=True),
+                race=True
+            ))
 
     def secondary(self):
         print('starting second')
@@ -70,7 +79,6 @@ class mission_selector(fullbot):
                 right_pressed = False
 
             wait(20)
-
 
 if __name__ == "__main__":
     bot = mission_selector()
