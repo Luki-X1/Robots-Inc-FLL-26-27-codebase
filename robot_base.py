@@ -10,8 +10,8 @@ left_motor = Motor(Port.D, Direction.COUNTERCLOCKWISE)
 right_motor = Motor(Port.C)
 color_sensor = ColorSensor(Port.F)
 
-front_attach = Motor(Port.A)
-top_attach = Motor(Port.E)
+front_attach = Motor(Port.E)
+top_attach = Motor(Port.A)
 
 drive_base = DriveBase(left_motor, right_motor, wheel_diameter=102, axle_track=120)
 drive_base.use_gyro(True)
@@ -23,7 +23,7 @@ color_sensor.detectable_colors([
     Color.BLUE,
     Color.YELLOW,
     Color.MAGENTA,
-    Color.GREEN,
+    Color.ORANGE,
     Color.WHITE,
     Color.NONE,
 ])
@@ -32,6 +32,8 @@ class robot_base_class:
     def __init__(self):
         self.hub = hub
         self.db = drive_base
+        self.front_attach = front_attach
+        self.top_attach = top_attach
         self.sensor = color_sensor
         self.trackwidth = 120
 
