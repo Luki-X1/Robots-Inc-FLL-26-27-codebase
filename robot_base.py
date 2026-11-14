@@ -19,7 +19,8 @@ drive_base.use_gyro(True)
 # Separate Magenta (pink/purple side), Red (true red), and Orange (amber/yellow side)
 Color.MAGENTA = Color(h=322, s=75, v=65)
 Color.RED = Color(h=0, s=92, v=55)
-Color.ORANGE = Color(h=24, s=90, v=75)
+Color.ORANGE = Color(h=18, s=90, v=75)
+Color.YELLOW = Color(h=48, s=90, v=85)
 
 color_sensor.detectable_colors([
     Color.RED,
@@ -53,13 +54,19 @@ class time_class(robot_base_class):
         await wait(duration)
 
 class turn_base_class(robot_base_class):
-    async def Ltturn(self, angle, velo):
+    async def Ltturn(self, angle, velo, wait=True):
         self.db.settings(turn_rate=abs(velo))
-        await self.db.turn(-angle)
+        if wait:
+            await self.db.turn(-angle)
+        else:
+            self.db.turn(-angle, wait=False)
 
-    async def Rtturn(self, angle, velo):
+    async def Rtturn(self, angle, velo, wait=True):
         self.db.settings(turn_rate=abs(velo))
-        await self.db.turn(angle)
+        if wait:
+            await self.db.turn(angle)
+        else:
+            self.db.turn(angle, wait=False)
 
     async def Lwturn(self, radius, angle, velo):
         self.db.settings(straight_speed=abs(velo))

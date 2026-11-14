@@ -22,8 +22,15 @@ async def teemo():
     await robot.time.wait(1000)
     #turn 40 degrees right to pull fungus
     await robot.turn.Rtturn(45, 300)
-    await robot.turn.Rtturn(-45, 175)#--| jiggle out fungus
-    await robot.turn.Rtturn(45, 300)# --|
+    await robot.turn.Rtturn(-45, 175)  # --| jiggle out fungus
+    robot.turn.Rtturn(45, 300, wait=False)  # --|
+    while not robot.db.done():
+        if robot.db.stalled():
+            robot.db.stop()
+            break
+        await robot.time.wait(10)
+    await robot.turn.Rtturn(-70, 300)
+    await robot.turn.Rtturn(70, 300)
     '''# Reverse straight
     robot.straight.drive(-170, 170)
     # Reverse back along the exact same wide curve (-180 degrees)

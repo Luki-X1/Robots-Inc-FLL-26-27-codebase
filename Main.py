@@ -77,7 +77,9 @@ class mission_selector(fullbot):
                 self.colorrun(readcolor)
             elif Button.RIGHT not in pressed:
                 right_pressed = False
-
+                
+            readcolor = self.sensor.color()
+            print(readcolor, self.sensor.hsv())
             wait(20)
 
 if __name__ == "__main__":
