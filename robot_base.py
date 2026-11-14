@@ -10,6 +10,9 @@ left_motor = Motor(Port.D, Direction.COUNTERCLOCKWISE)
 right_motor = Motor(Port.C)
 color_sensor = ColorSensor(Port.B)
 
+front_attach = Motor(Port.A)
+top_attach = Motor(Port.E)
+
 drive_base = DriveBase(left_motor, right_motor, wheel_diameter=88, axle_track=120)
 drive_base.use_gyro(True)
 
