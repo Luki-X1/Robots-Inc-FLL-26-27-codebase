@@ -16,8 +16,11 @@ top_attach = Motor(Port.A)
 drive_base = DriveBase(left_motor, right_motor, wheel_diameter=102, axle_track=120)
 drive_base.use_gyro(True)
 
-Color.RED = Color(h=355, s=90, v=50)
-Color.MAGENTA = Color(h=330, s=80, v=60)
+# Separate Magenta (pink/purple side), Red (true red), and Orange (amber/yellow side)
+Color.MAGENTA = Color(h=322, s=75, v=65)
+Color.RED = Color(h=0, s=92, v=55)
+Color.ORANGE = Color(h=24, s=90, v=75)
+
 color_sensor.detectable_colors([
     Color.RED,
     Color.BLUE,
