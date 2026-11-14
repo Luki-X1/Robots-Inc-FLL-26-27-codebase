@@ -8,7 +8,7 @@ from pybricks.tools import wait
 hub = PrimeHub()
 left_motor = Motor(Port.D, Direction.COUNTERCLOCKWISE)
 right_motor = Motor(Port.C)
-color_sensor = ColorSensor(Port.B)
+color_sensor = ColorSensor(Port.F)
 
 drive_base = DriveBase(left_motor, right_motor, wheel_diameter=102, axle_track=120)
 drive_base.use_gyro(True)
