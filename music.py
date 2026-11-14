@@ -1,5 +1,5 @@
 from robot_base import fullbot
-
+from pybricks.tools import wait
 
 class music_base(fullbot):
     def __init__(self):
