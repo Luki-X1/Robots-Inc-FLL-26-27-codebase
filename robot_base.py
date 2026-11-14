@@ -1,6 +1,6 @@
 from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import Motor, ColorSensor
-from pybricks.parameters import Port, Direction, Stop
+from pybricks.parameters import Port, Direction, Stop, Color
 from pybricks.robotics import DriveBase
 from pybricks.tools import wait
 
@@ -8,9 +8,23 @@ from pybricks.tools import wait
 hub = PrimeHub()
 left_motor = Motor(Port.D, Direction.COUNTERCLOCKWISE)
 right_motor = Motor(Port.C)
-color_sensor = ColorSensor(Port.B)
+color_sensor = ColorSensor(Port.F)
 
-drive_base = DriveBase(left_motor, right_motor, wheel_diameter=88, axle_track=120)
+Color.RED = Color(h=355, s=90, v=50)
+Color.MAGENTA = Color(h=330, s=80, v=60)
+
+# Tell the sensor to actually use the updated Color.RED and Color.MAGENTA values!
+color_sensor.detectable_colors([
+    Color.RED,
+    Color.BLUE,
+    Color.YELLOW,
+    Color.MAGENTA,
+    Color.ORANGE,
+    Color.WHITE,
+    Color.NONE,
+])
+
+drive_base = DriveBase(left_motor, right_motor, wheel_diameter=102, axle_track=120)
 drive_base.use_gyro(True)
 
 

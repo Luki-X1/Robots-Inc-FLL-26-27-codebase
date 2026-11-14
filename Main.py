@@ -10,6 +10,7 @@ from Mission_codes.M07_noahXremiXjiggle import noahXremiXjiggle
 from Mission_codes.M11_luke import luke
 from Mission_codes.M_UND_swapside import swapside
 
+from music import haydn_104_finale
 
 class mission_selector(fullbot):
     def __init__(self):
@@ -19,7 +20,7 @@ class mission_selector(fullbot):
             Color.YELLOW: mia,
             Color.MAGENTA: wael,
             Color.WHITE: luke,
-            Color.GREEN: teemo,
+            Color.ORANGE: teemo,
             Color.BLUE: noahXremiXjiggle,
             Color.NONE: swapside,
         }
@@ -50,7 +51,7 @@ class mission_selector(fullbot):
                 self.hub.display.char(self.numtolet[2])
             elif readcolor == Color.MAGENTA:
                 self.hub.display.char(self.numtolet[3])
-            elif readcolor == Color.GREEN:
+            elif readcolor == Color.ORANGE:
                 self.hub.display.char(self.numtolet[4])
             elif readcolor == Color.WHITE:
                 self.hub.display.char(self.numtolet[5])
