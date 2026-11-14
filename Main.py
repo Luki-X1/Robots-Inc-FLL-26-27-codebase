@@ -44,6 +44,7 @@ class mission_selector(fullbot):
                 haydn_104_finale.play_background(gap=25, loop=True),
                 race=True
             ))
+            self.hub.speaker.beep(0,0)
 
     def secondary(self):
         print('starting second')
@@ -77,7 +78,7 @@ class mission_selector(fullbot):
                 self.colorrun(readcolor)
             elif Button.RIGHT not in pressed:
                 right_pressed = False
-                
+
             readcolor = self.sensor.color()
             print(readcolor, self.sensor.hsv())
             wait(20)
