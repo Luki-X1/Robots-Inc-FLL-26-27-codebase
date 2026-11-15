@@ -10,19 +10,19 @@ from Mission_codes.M07_noahXremiXjiggle import noahXremiXjiggle
 from Mission_codes.M11_luke import luke
 from Mission_codes.M_UND_swapside import swapside
 
-from music import haydn_104_finale
+from music import *
 
 class mission_selector(fullbot):
     def __init__(self):
         super().__init__()
         self.colorcode = {
-            Color.RED: daphne,
-            Color.YELLOW: mia,
-            Color.MAGENTA: wael,
-            Color.WHITE: luke,
-            Color.ORANGE: teemo,
-            Color.BLUE: noahXremiXjiggle,
-            Color.NONE: swapside,
+            Color.RED: [daphne, haydn_104_opening],
+            Color.YELLOW: [mia, haydn_104_opening],
+            Color.MAGENTA: [wael, haydn_104_opening],
+            Color.WHITE: [luke, haydn_104_opening],
+            Color.ORANGE: [teemo, final_countdown],
+            Color.BLUE: [noahXremiXjiggle, haydn_104_opening],
+            Color.NONE: [swapside, haydn_104_opening],
         }
         self.numtolet = [
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
@@ -37,11 +37,12 @@ class mission_selector(fullbot):
     def colorrun(self, colorread):
         print('running colorrun on color:', colorread)
         if colorread in self.colorcode:
-            mission_func = self.colorcode[colorread]
+            mission_func = self.colorcode[colorread][0]
+            song = self.colorcode[colorread][1]
             # Runs the mission and background music simultaneously; stops music as soon as the mission finishes
             run_task(multitask(
                 self._run_mission_task(mission_func),
-                haydn_104_finale.play_background(gap=25, loop=True),
+                song.play_background(gap=50, loop=True),
                 race=True
             ))
             self.hub.speaker.beep(0,0)
