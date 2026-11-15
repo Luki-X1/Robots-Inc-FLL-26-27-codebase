@@ -16,9 +16,7 @@ top_attach = Motor(Port.A)
 drive_base = DriveBase(left_motor, right_motor, wheel_diameter=102, axle_track=120)
 drive_base.use_gyro(True)
 
-# 1. Ensure both drive motors are allowed to use maximum battery voltage (9000 mV)
-left_motor.control.limits(torque=1000)   # Max torque in mNm (default is lower on some motors)
-right_motor.control.limits(torque=1000)
+drive_base.distance_control.stall_tolerances(speed=20, time=100)
 
 # 2. Allow the heading PID controller to build up power faster when pushing against resistance
 drive_base.heading_control.pid(ki=2500)  # Default ki is around 1500–2000; higher = stronger push when stuck

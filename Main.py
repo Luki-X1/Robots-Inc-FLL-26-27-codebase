@@ -20,8 +20,8 @@ class mission_selector(fullbot):
             Color.YELLOW: [mia, haydn_104_opening],
             Color.MAGENTA: [wael, haydn_104_opening],
             Color.WHITE: [luke, haydn_104_opening],
-            Color.ORANGE: [teemo, final_countdown],
-            Color.BLUE: [noahXremiXjiggle, haydn_104_opening],
+            Color.ORANGE: [teemo, ants_go_marching],
+            Color.BLUE: [noahXremiXjiggle, final_countdown],
             Color.NONE: [swapside, haydn_104_opening],
         }
         self.numtolet = [
