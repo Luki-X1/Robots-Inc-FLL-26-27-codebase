@@ -16,6 +16,13 @@ top_attach = Motor(Port.A)
 drive_base = DriveBase(left_motor, right_motor, wheel_diameter=102, axle_track=120)
 drive_base.use_gyro(True)
 
+# 1. Ensure both drive motors are allowed to use maximum battery voltage (9000 mV)
+left_motor.control.limits(torque=1000)   # Max torque in mNm (default is lower on some motors)
+right_motor.control.limits(torque=1000)
+
+# 2. Allow the heading PID controller to build up power faster when pushing against resistance
+drive_base.heading_control.pid(ki=2500)  # Default ki is around 1500–2000; higher = stronger push when stuck
+
 # Separate Magenta (pink/purple side), Red (true red), and Orange (amber/yellow side)
 Color.MAGENTA = Color(h=322, s=75, v=65)
 Color.RED = Color(h=0, s=92, v=55)
@@ -32,6 +39,7 @@ color_sensor.detectable_colors([
     Color.NONE,
 ])
 
+
 class robot_base_class:
     def __init__(self):
         self.hub = hub
@@ -41,10 +49,15 @@ class robot_base_class:
         self.sensor = color_sensor
         self.trackwidth = 120
 
+
 class straight_base_class(robot_base_class):
-    async def drive(self, dist, velo):
+    async def drive(self, dist, velo, wait=True):
         self.db.settings(straight_speed=abs(velo))
-        await self.db.straight(dist, then=Stop.COAST)
+        if wait:
+            await self.db.straight(dist, then=Stop.COAST)
+        else:
+            self.db.straight(dist, then=Stop.COAST, wait=False)
+
 
 class time_class(robot_base_class):
     def stop(self):
@@ -52,6 +65,7 @@ class time_class(robot_base_class):
 
     async def wait(self, duration):
         await wait(duration)
+
 
 class turn_base_class(robot_base_class):
     async def Ltturn(self, angle, velo, wait=True):
@@ -81,6 +95,7 @@ class turn_base_class(robot_base_class):
 
     async def Rarc_turn(self, angle, velo):
         await self.Rwturn(0, angle, velo)
+
 
 class fullbot(robot_base_class):
     def __init__(self):
